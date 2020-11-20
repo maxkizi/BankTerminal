@@ -46,7 +46,8 @@ public class User {
         Account account = new Account(currencyType, number, password);
         accountMap.put(accountName, account);
     }
-    public Map<String, Account> getAccountMap(){
+    public Map<String, Account> getAccounts(){
         return accountMap;
     }
+
 }

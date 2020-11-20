@@ -11,8 +11,9 @@ public class Terminal {
     }
 
     public void authorize(int number, int pinCode, String accountName){
-        Map<String, Account> accountMap = user.getAccountMap();
+        Map<String, Account> accountMap = user.getAccounts();
         Account account = accountMap.get(accountName);
+        getPinAndNumber(account);
 
     }
 
@@ -28,18 +29,7 @@ public class Terminal {
         return 0;
     }
 
-    void getPinAndNumber(){
-        String className = "User";
-        try {
-            Class userClass = Class.forName("User");
-            Field pinCode = userClass.getDeclaredField("pinCode");
-            Field number = userClass.getDeclaredField("number");
+    void getPinAndNumber(Account account){
 
-        } catch (ClassNotFoundException e) {
-            System.out.println("Не могу найти класс с именем " + className);
-            e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
     }
 }

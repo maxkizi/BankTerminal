@@ -10,47 +10,23 @@ import java.lang.reflect.InvocationTargetException;
 import static org.junit.Assert.*;
 
 public class TerminalTest {
-  public   Account account = new Account("rub" , 10, 7831);
-
-
+    User user1 = new User(1, "Кизилов", "Максим");
 
     @Test
   public   void getPinAndNumber(){
-        String className = "User";
         try {
             Class accountClass = Class.forName("com.banksystem.Account");
-            Constructor constructor = accountClass.getConstructor();
-            constructor.newInstance("rub", 10, 7831);
-            Field pinCode = accountClass.getDeclaredField("pinCode");
-            Field number = accountClass.getDeclaredField("number");
-
-
-
-           /* int resultNumber = number.getInt(number);
-            int resultPinCode = number.getInt(pinCode);*/
-
-            /*Assert.assertTrue(resultNumber == 10);
-            Assert.assertTrue(resultPinCode == 7831);*/
-
+            Object account = accountClass.getConstructor(String.class, int.class, int.class).newInstance("rub", 10, 7831);
         } catch (ClassNotFoundException e) {
-            System.out.println("Не могу найти класс с именем " + className);
             e.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            System.out.println("Не могу найти поле");
+            System.out.println("Не могу найти класс");
+        } catch (NoSuchMethodException e) {
             e.printStackTrace();
-        }/* catch (IllegalAccessException e) {
-            System.out.println("не могу получить значение с поля");
+            System.out.println("Не могу получить конструктор с указанными параметрами");
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
             e.printStackTrace();
-        }*/ catch (NoSuchMethodException e) {
-            System.out.println("не могу получить конструктор");
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-            System.out.println("не могу создать экземпляр класса");
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            System.out.println("проблемы с созданием экземпляра");
         }
+
     }
 }
