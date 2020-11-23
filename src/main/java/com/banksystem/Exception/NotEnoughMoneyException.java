@@ -1,7 +1,7 @@
 package com.banksystem.Exception;
 
-public class NotEnoghMoneyException extends Throwable {
-    public NotEnoghMoneyException(){
+public class NotEnoughMoneyException extends Throwable {
+    public NotEnoughMoneyException(){
         super("Недостаточно денег для снятия");
     }
 }

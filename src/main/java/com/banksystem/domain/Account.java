@@ -1,13 +1,16 @@
 package com.banksystem.domain;
 
+import com.banksystem.Exception.MyAccessException;
+import com.banksystem.domain.users.User;
+
 public class Account {
     private int balance;
-    private String currencyType;
+    private CurrencyType currencyType;
     private int number;
     private int pinCode;
+    private User user;
 
-
-    public Account(String currencyType, int number, int password) {
+    public Account(CurrencyType currencyType, int number, int password) {
         this.currencyType = currencyType;
         this.number = number;
         this.pinCode = password;
@@ -16,21 +19,21 @@ public class Account {
     public Account() {
     }
 
-    public int getNumber() {
-        return number;
+    public boolean getAccess(int pinCode) throws MyAccessException {
+        if (this.pinCode == pinCode)
+            return true;
+        else throw new  MyAccessException();
     }
 
-    public void setNumber(int number) {
-        this.number = number;
+    public CurrencyType getCurrencyType() {
+        return currencyType;
     }
 
-    public int getPinCode() {
-        return pinCode;
+
+    public int getBalance(){
+        return balance;
     }
 
-    public void setPinCode(int pinCode) {
-        this.pinCode = pinCode;
-    }
 
     public int deposit(int amount){
         balance += amount;
@@ -42,7 +45,4 @@ public class Account {
         return balance;
     }
 
-    public int getBalance(){
-        return balance;
-    }
 }
