@@ -1,4 +1,4 @@
-package com.banksystem;
+package com.banksystem.domain;
 
 public class Account {
     private int balance;
@@ -16,11 +16,19 @@ public class Account {
     public Account() {
     }
 
-    public void setNumber(int number){
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
         this.number = number;
     }
 
-    public void setPinCode(int pinCode){
+    public int getPinCode() {
+        return pinCode;
+    }
+
+    public void setPinCode(int pinCode) {
         this.pinCode = pinCode;
     }
 

@@ -1,12 +1,15 @@
-package com.banksystem;
+package com.banksystem.domain;
 
+import com.banksystem.domain.Account;
+
+import java.util.HashMap;
 import java.util.Map;
 
 public class User {
     private int id;
     private String firstName;
     private String lastName;
-    private Map<String ,Account> accountMap;
+    private Map<String , Account> accountMap = new HashMap<>();
 
 
     public User(int id, String firstName, String lastName) {
@@ -42,8 +45,9 @@ public class User {
         this.lastName = lastName;
     }
 
-    public void createAccount( String currencyType, int number, int password, String accountName){
-        Account account = new Account(currencyType, number, password);
+
+    public void createAccount( String currencyType, int number, int pinCode, String accountName){
+        Account account = new Account(currencyType, number, pinCode);
         accountMap.put(accountName, account);
     }
     public Map<String, Account> getAccounts(){

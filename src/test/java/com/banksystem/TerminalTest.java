@@ -1,32 +1,33 @@
 package com.banksystem;
 
+import com.banksystem.Exception.MyAuthorizeException;
+import com.banksystem.domain.Terminal;
+import com.banksystem.domain.User;
+import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
+public class TerminalTest extends TestCase {
+    User user1;
+    Terminal terminal1;
 
-import static org.junit.Assert.*;
+    @BeforeClass
+    public void init() {
+        user1 = new User(1, "Maxim", "Kizilov");
+        user1.createAccount("rub", 100100, 7831, "Rubles");
+        terminal1 = new Terminal(user1);
+    }
 
-public class TerminalTest {
-    User user1 = new User(1, "Кизилов", "Максим");
 
     @Test
-  public   void getPinAndNumber(){
-        try {
-            Class accountClass = Class.forName("com.banksystem.Account");
-            Object account = accountClass.getConstructor(String.class, int.class, int.class).newInstance("rub", 10, 7831);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            System.out.println("Не могу найти класс");
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-            System.out.println("Не могу получить конструктор с указанными параметрами");
-        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
-            e.printStackTrace();
-            System.out.println("проблемы с созданием экземпляра");
-        }
+    public void testAuthorize() throws MyAuthorizeException {
 
+
+        boolean result = terminal1.authorize(100100, 7831, "Rubles");
+        Assert.assertTrue(result);
     }
+
+
 }
