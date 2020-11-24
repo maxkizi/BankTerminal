@@ -4,23 +4,23 @@ import com.banksystem.Exception.MyAuthorizeException;
 import com.banksystem.Exception.NeedAuthorizationException;
 import com.banksystem.Exception.NotEnoughMoneyException;
 import com.banksystem.domain.accounts.SderBankAccount;
+import com.banksystem.domain.accounts.TazPromBankAccount;
+import com.banksystem.domain.accounts.VtfBankAccount;
 
-import static com.banksystem.domain.accounts.SderBankAccount.PERCENT_FOR_OTHERS_BANKS;
-
-
-public class SderBankTerminal extends Terminal {
-
-
+public class VtfBankTerminal extends Terminal{
     public int deposit(int amount) throws MyAuthorizeException, NeedAuthorizationException {
         if (successfulAuthorization) {
             if (currentAccount instanceof SderBankAccount) {
+                calcCommission(amount, VtfBankAccount.PERCENT_FOR_SDERBANK);
+                currentAccount.deposit(amount -= bankCommission);
+            } else if (currentAccount instanceof TazPromBankAccount) {
+                calcCommission(amount, VtfBankAccount.PERCENT_FOR_TAZPROM);
+                currentAccount.deposit(amount -= bankCommission);
+            } else
                 currentAccount.deposit(amount);
-            } else {
-                calcCommission(amount, PERCENT_FOR_OTHERS_BANKS);
-                currentAccount.deposit( amount -= bankCommission);
-            }
             printResultOfOperation(amount, "Внесено");
             return currentAccount.getBalance();
+
         } else throw new MyAuthorizeException();
     }
 
@@ -30,14 +30,14 @@ public class SderBankTerminal extends Terminal {
         } else if (!successfulAuthorization) {
             throw new MyAuthorizeException();
         } else {
-
             if (currentAccount instanceof SderBankAccount) {
-                currentAccount.withdraw(amount);
-            } else {
-                calcCommission(amount, PERCENT_FOR_OTHERS_BANKS);
-                amount += bankCommission;
-                currentAccount.withdraw(amount);
-            }
+                calcCommission(amount, VtfBankAccount.PERCENT_FOR_SDERBANK);
+                currentAccount.deposit(amount += bankCommission);
+            } else if (currentAccount instanceof TazPromBankAccount) {
+                calcCommission(amount, VtfBankAccount.PERCENT_FOR_TAZPROM);
+                currentAccount.deposit(amount += bankCommission);
+            }else
+            currentAccount.withdraw(amount);
             printResultOfOperation(amount - bankCommission, "Выдано");
             return currentAccount.getBalance();
         }

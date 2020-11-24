@@ -1,9 +1,10 @@
-package com.banksystem.domain;
+package com.banksystem.domain.accounts;
 
 import com.banksystem.Exception.MyAccessException;
+import com.banksystem.domain.CurrencyType;
 import com.banksystem.domain.users.User;
 
-public class Account {
+public abstract class Account {
     private int balance;
     private CurrencyType currencyType;
     private int number;

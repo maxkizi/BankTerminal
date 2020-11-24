@@ -4,15 +4,17 @@ import com.banksystem.Exception.MyAccessException;
 import com.banksystem.Exception.MyAuthorizeException;
 import com.banksystem.Exception.NeedAuthorizationException;
 import com.banksystem.Exception.NotEnoughMoneyException;
-import com.banksystem.domain.Account;
+import com.banksystem.domain.accounts.Account;
+import com.banksystem.domain.accounts.TazPromBankAccount;
 import com.banksystem.domain.users.User;
 
 import java.util.Map;
 
-public class Terminal {
+public abstract class Terminal  {
     private User user;
-    private boolean successfulAuthorization;
-    private Account currentAccount;
+    protected boolean successfulAuthorization;
+    protected Account currentAccount;
+    protected int bankCommission;
 
     public Terminal(User user) {
         this.user = user;
@@ -39,10 +41,10 @@ public class Terminal {
         boolean accessToAccount = false;
         try {
             accessToAccount = currentAccount.getAccess(pinCode);
-        }catch (MyAccessException e) {
+        } catch (MyAccessException e) {
             System.out.println("Неверный логин(номер)/пароль");
             e.printStackTrace();
-        }catch (NullPointerException ex){
+        } catch (NullPointerException ex) {
             ex.printStackTrace();
             System.out.println("Возможно номер счета введен неправильно (Вставьте карту правильно)");
         }
@@ -64,28 +66,19 @@ public class Terminal {
         } else throw new NeedAuthorizationException();
     }
 
-    public int deposit(int amount) throws MyAuthorizeException, NeedAuthorizationException {
-        if (successfulAuthorization) {
-            currentAccount.deposit(amount);
-            System.out.println("Операция прошла успешно");
-            System.out.println("Внесено " + amount + " " + currentAccount.getCurrencyType());
-            System.out.println(getBalance());
-            return currentAccount.getBalance();
-        } else throw new MyAuthorizeException();
+    void printResultOfOperation(int amount, String operation) throws NeedAuthorizationException {
+        System.out.println("Операция прошла успешно");
+        System.out.println(operation + " " + amount + " " + currentAccount.getCurrencyType());
+        System.out.println("Комиссия: " + bankCommission);
+        System.out.println(getBalance());
     }
 
-    public int withdraw(int amount) throws NotEnoughMoneyException, MyAuthorizeException, NeedAuthorizationException {
-        if (currentAccount.getBalance() < amount) {
-            throw new NotEnoughMoneyException();
-        } else if (!successfulAuthorization) {
-            throw new MyAuthorizeException();
-        } else {
-            currentAccount.withdraw(amount);
-            System.out.println("Операция прошла успешно");
-            System.out.println("Выдача " + amount + " " + currentAccount.getCurrencyType());
-            System.out.println(getBalance());
-            return currentAccount.getBalance();
-        }
+    int calcCommission(int amount, int percent){
+        return  bankCommission = amount * TazPromBankAccount.PERCENT_FOR_SDERBANK / 100;
     }
+
+    public abstract int deposit(int amount) throws MyAuthorizeException, NeedAuthorizationException;
+
+    public abstract int withdraw(int amount) throws NotEnoughMoneyException, MyAuthorizeException, NeedAuthorizationException;
 
 }

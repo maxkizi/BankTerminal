@@ -18,7 +18,7 @@ public  class TerminalTest {
     public static void  init(){
         user = new User(1 , "Максим", "Кизилов");
         user.createAccount(CurrencyType.RUBLE, 100100, 7831);
-        terminal = new Terminal(user);
+//        terminal = new Terminal(user);
     }
 
 
