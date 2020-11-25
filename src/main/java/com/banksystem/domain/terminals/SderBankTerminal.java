@@ -3,10 +3,14 @@ package com.banksystem.domain.terminals;
 import com.banksystem.Exception.MyAuthorizeException;
 import com.banksystem.Exception.NeedAuthorizationException;
 import com.banksystem.Exception.NotEnoughMoneyException;
+import com.banksystem.domain.accounts.Account;
 import com.banksystem.domain.accounts.SderBankAccount;
 
+import com.banksystem.domain.enums.BankName;
 import com.banksystem.domain.users.User;
 
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SderBankTerminal extends Terminal {
@@ -29,29 +33,29 @@ public class SderBankTerminal extends Terminal {
                 calcCommission(amount, PERCENT_FOR_OTHERS_BANKS);
                 currentAccount.deposit(amount -= bankCommission);
             }
-            printResultOfOperation(amount+=bankCommission, "Внесено");
+            printResultOfOperation(amount += bankCommission, "Внесено");
             return currentAccount.getBalance();
         } else throw new MyAuthorizeException();
+
     }
 
     @Override
     public int withdraw(int amount) throws NotEnoughMoneyException, MyAuthorizeException, NeedAuthorizationException {
+        int rememberAmount = amount;
         if (currentAccount.getBalance() < amount) {
             throw new NotEnoughMoneyException();
         } else if (!successfulAuthorization) {
             throw new MyAuthorizeException();
         } else {
-
             if (currentAccount instanceof SderBankAccount) {
                 currentAccount.withdraw(amount);
             } else {
                 calcCommission(amount, PERCENT_FOR_OTHERS_BANKS);
                 amount += bankCommission;
                 currentAccount.withdraw(amount);
-                amount-=bankCommission;
             }
-            printResultOfOperation(amount, "Выдано");
-            return amount;
+            printResultOfOperation(rememberAmount, "Выдано");
+            return rememberAmount;
         }
     }
 }

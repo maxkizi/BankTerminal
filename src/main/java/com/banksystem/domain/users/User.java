@@ -47,7 +47,7 @@ public class User {
     }
 
     //создаем аккаунт(счет), у одного пользователя может быть несколько счетов
-    //при создании счета указываем: тип валюты, номер счета(номер карты), пин кодж
+    //при создании счета указываем: тип валюты, номер счета(номер карты), пин код
     public void createAccount(CurrencyType currencyType, int number, int pinCode, BankName nameOfBankName)
             throws BankNotFoundException {
         AccountFactory accountFactory = createAccountFactory(nameOfBankName);
@@ -57,6 +57,10 @@ public class User {
 
     public Map<Integer, Account> getAccounts() {
         return accountMap;
+    }
+
+    public void transfer(Account donor, Account acceptor){
+
     }
 
     private AccountFactory createAccountFactory(BankName nameOfBank) throws BankNotFoundException {

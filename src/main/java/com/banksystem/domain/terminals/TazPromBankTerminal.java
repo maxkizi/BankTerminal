@@ -20,26 +20,26 @@ public class TazPromBankTerminal extends Terminal {
     }
 
 
-
     public int deposit(int amount) throws MyAuthorizeException, NeedAuthorizationException {
+        int rememberAmount = amount;
         if (successfulAuthorization) {
             if (currentAccount instanceof SderBankAccount) {
-              calcCommission(amount, PERCENT_FOR_SDERBANK);
+                calcCommission(amount, PERCENT_FOR_SDERBANK);
                 currentAccount.deposit(amount -= bankCommission);
-                amount+=bankCommission;
             } else if (currentAccount instanceof VtfBankAccount) {
                 calcCommission(amount, PERCENT_FOR_VTF);
                 currentAccount.deposit(amount -= bankCommission);
-                amount+=bankCommission;
             } else
                 currentAccount.deposit(amount);
-            printResultOfOperation(amount, "Внесено");
+            printResultOfOperation(rememberAmount, "Внесено");
             return currentAccount.getBalance();
 
         } else throw new MyAuthorizeException();
     }
 
+
     public int withdraw(int amount) throws NotEnoughMoneyException, MyAuthorizeException, NeedAuthorizationException {
+        int rememberAmount = amount;
         if (currentAccount.getBalance() < amount) {
             throw new NotEnoughMoneyException();
         } else if (!successfulAuthorization) {
@@ -48,15 +48,13 @@ public class TazPromBankTerminal extends Terminal {
             if (currentAccount instanceof SderBankAccount) {
                 calcCommission(amount, PERCENT_FOR_SDERBANK);
                 currentAccount.withdraw(amount += bankCommission);
-                amount-=bankCommission;
             } else if (currentAccount instanceof VtfBankAccount) {
                 calcCommission(amount, 6);
                 currentAccount.withdraw(amount += bankCommission);
-                amount-=bankCommission;
-            }else
-            currentAccount.withdraw(amount);
-            printResultOfOperation(amount, "Выдано");
-            return amount;
+            } else
+                currentAccount.withdraw(amount);
+            printResultOfOperation(rememberAmount, "Выдано");
+            return rememberAmount;
         }
     }
 }

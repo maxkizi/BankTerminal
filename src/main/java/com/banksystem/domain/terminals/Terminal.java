@@ -12,7 +12,7 @@ public abstract class Terminal {
     private User user;
     protected boolean successfulAuthorization;
     protected Account currentAccount;
-    int bankCommission;
+    protected int bankCommission;
 
     public Terminal(User user) {
         this.user = user;
@@ -59,6 +59,7 @@ public abstract class Terminal {
 
     public int getBalance() throws NeedAuthorizationException {
         if (successfulAuthorization) {
+            System.out.println("Ваш баланс " + currentAccount.getBalance() + " " + currentAccount.getCurrencyType());
             return currentAccount.getBalance();
         } else throw new NeedAuthorizationException();
     }

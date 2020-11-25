@@ -22,7 +22,6 @@ public class VtfBankTerminal extends Terminal {
     @Override
     public int deposit(int amount) throws MyAuthorizeException, NeedAuthorizationException {
         int rememberAmount = amount;
-
         if (successfulAuthorization) {
             if (currentAccount instanceof SderBankAccount) {
                 calcCommission(amount, PERCENT_FOR_SDERBANK);
@@ -41,7 +40,6 @@ public class VtfBankTerminal extends Terminal {
     @Override
     public int withdraw(int amount) throws NotEnoughMoneyException, MyAuthorizeException, NeedAuthorizationException {
         int rememberAmount = amount;
-
         if (currentAccount.getBalance() < amount) {
             throw new NotEnoughMoneyException();
         } else if (!successfulAuthorization) {
@@ -52,11 +50,11 @@ public class VtfBankTerminal extends Terminal {
                 currentAccount.withdraw(amount += bankCommission);
             } else if (currentAccount instanceof TazPromBankAccount) {
                 calcCommission(amount, PERCENT_FOR_TAZPROM);
-                currentAccount.withdraw(amount += bankCommission);
+                currentAccount.deposit(amount += bankCommission);
             } else
                 currentAccount.withdraw(amount);
             printResultOfOperation(rememberAmount, "Выдано");
-            return amount;
+            return rememberAmount;
         }
     }
 }
