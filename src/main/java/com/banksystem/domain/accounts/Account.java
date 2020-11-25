@@ -1,7 +1,7 @@
 package com.banksystem.domain.accounts;
 
 import com.banksystem.Exception.MyAccessException;
-import com.banksystem.domain.CurrencyType;
+import com.banksystem.domain.enums.CurrencyType;
 import com.banksystem.domain.users.User;
 
 public abstract class Account {

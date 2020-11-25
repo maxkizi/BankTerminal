@@ -6,16 +6,31 @@ import com.banksystem.Exception.NotEnoughMoneyException;
 import com.banksystem.domain.accounts.SderBankAccount;
 import com.banksystem.domain.accounts.TazPromBankAccount;
 import com.banksystem.domain.accounts.VtfBankAccount;
+import com.banksystem.domain.users.User;
 
 public class TazPromBankTerminal extends Terminal {
+    public static final int PERCENT_FOR_SDERBANK = 12;
+    public static final int PERCENT_FOR_VTF = 6;
+
+    public TazPromBankTerminal(User user) {
+        super(user);
+    }
+
+    public TazPromBankTerminal() {
+    }
+
+
+
     public int deposit(int amount) throws MyAuthorizeException, NeedAuthorizationException {
         if (successfulAuthorization) {
             if (currentAccount instanceof SderBankAccount) {
-              calcCommission(amount, TazPromBankAccount.PERCENT_FOR_SDERBANK);
+              calcCommission(amount, PERCENT_FOR_SDERBANK);
                 currentAccount.deposit(amount -= bankCommission);
+                amount+=bankCommission;
             } else if (currentAccount instanceof VtfBankAccount) {
-                calcCommission(amount, TazPromBankAccount.PERCENT_FOR_VTF);
+                calcCommission(amount, PERCENT_FOR_VTF);
                 currentAccount.deposit(amount -= bankCommission);
+                amount+=bankCommission;
             } else
                 currentAccount.deposit(amount);
             printResultOfOperation(amount, "Внесено");
@@ -31,15 +46,17 @@ public class TazPromBankTerminal extends Terminal {
             throw new MyAuthorizeException();
         } else {
             if (currentAccount instanceof SderBankAccount) {
-                calcCommission(amount, TazPromBankAccount.PERCENT_FOR_SDERBANK);
+                calcCommission(amount, PERCENT_FOR_SDERBANK);
                 currentAccount.withdraw(amount += bankCommission);
+                amount-=bankCommission;
             } else if (currentAccount instanceof VtfBankAccount) {
-                calcCommission(amount, TazPromBankAccount.PERCENT_FOR_VTF);
-                currentAccount.withdraw(amount -= bankCommission);
+                calcCommission(amount, 6);
+                currentAccount.withdraw(amount += bankCommission);
+                amount-=bankCommission;
             }else
             currentAccount.withdraw(amount);
-            printResultOfOperation(amount - bankCommission, "Выдано");
-            return currentAccount.getBalance();
+            printResultOfOperation(amount, "Выдано");
+            return amount;
         }
     }
 }

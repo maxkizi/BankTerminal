@@ -1,20 +1,18 @@
 package com.banksystem.domain.terminals;
-
 import com.banksystem.Exception.MyAccessException;
 import com.banksystem.Exception.MyAuthorizeException;
 import com.banksystem.Exception.NeedAuthorizationException;
 import com.banksystem.Exception.NotEnoughMoneyException;
 import com.banksystem.domain.accounts.Account;
-import com.banksystem.domain.accounts.TazPromBankAccount;
 import com.banksystem.domain.users.User;
 
 import java.util.Map;
 
-public abstract class Terminal  {
+public abstract class Terminal {
     private User user;
     protected boolean successfulAuthorization;
     protected Account currentAccount;
-    protected int bankCommission;
+    int bankCommission;
 
     public Terminal(User user) {
         this.user = user;
@@ -61,7 +59,6 @@ public abstract class Terminal  {
 
     public int getBalance() throws NeedAuthorizationException {
         if (successfulAuthorization) {
-            System.out.println("Ваш баланс " + " " + currentAccount.getBalance());
             return currentAccount.getBalance();
         } else throw new NeedAuthorizationException();
     }
@@ -70,11 +67,12 @@ public abstract class Terminal  {
         System.out.println("Операция прошла успешно");
         System.out.println(operation + " " + amount + " " + currentAccount.getCurrencyType());
         System.out.println("Комиссия: " + bankCommission);
-        System.out.println(getBalance());
+        System.out.println("Ваш баланс: " + getBalance());
     }
 
-    int calcCommission(int amount, int percent){
-        return  bankCommission = amount * TazPromBankAccount.PERCENT_FOR_SDERBANK / 100;
+    int calcCommission(int amount, int percent) {
+        bankCommission = 0;
+        return bankCommission = amount * percent / 100;
     }
 
     public abstract int deposit(int amount) throws MyAuthorizeException, NeedAuthorizationException;

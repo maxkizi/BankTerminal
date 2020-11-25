@@ -1,7 +1,13 @@
 package com.banksystem.domain.users;
 
+import com.banksystem.Exception.BankNotFoundException;
 import com.banksystem.domain.accounts.Account;
-import com.banksystem.domain.CurrencyType;
+import com.banksystem.domain.enums.BankName;
+import com.banksystem.domain.enums.CurrencyType;
+import com.banksystem.domain.accounts.factory.AccountFactory;
+import com.banksystem.domain.accounts.factory.SderBankAccountFactory;
+import com.banksystem.domain.accounts.factory.TazPromBankAccountFactory;
+import com.banksystem.domain.accounts.factory.VtfBankAccountFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,11 +48,29 @@ public class User {
 
     //создаем аккаунт(счет), у одного пользователя может быть несколько счетов
     //при создании счета указываем: тип валюты, номер счета(номер карты), пин кодж
-    public void createAccount(CurrencyType currencyType, int number, int pinCode){
-//        Account account = new Account(currencyType, number, pinCode);
-//        accountMap.put(number, account);
+    public void createAccount(CurrencyType currencyType, int number, int pinCode, BankName nameOfBankName)
+            throws BankNotFoundException {
+        AccountFactory accountFactory = createAccountFactory(nameOfBankName);
+        Account account = accountFactory.createAccount(currencyType, number, pinCode);
+        accountMap.put(number, account);
     }
-    public Map<Integer, Account> getAccounts(){
+
+    public Map<Integer, Account> getAccounts() {
         return accountMap;
+    }
+
+    private AccountFactory createAccountFactory(BankName nameOfBank) throws BankNotFoundException {
+
+        switch (nameOfBank) {
+            case SDER:
+                return new SderBankAccountFactory();
+            case VTF:
+                return new VtfBankAccountFactory();
+            case TAZPROM:
+                return new TazPromBankAccountFactory();
+            default:
+                throw new BankNotFoundException();
+        }
+
     }
 }

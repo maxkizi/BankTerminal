@@ -1,28 +1,42 @@
 package com.banksystem.domain;
 
+import com.banksystem.Exception.BankNotFoundException;
 import com.banksystem.Exception.MyAuthorizeException;
 import com.banksystem.Exception.NeedAuthorizationException;
 import com.banksystem.Exception.NotEnoughMoneyException;
+import com.banksystem.domain.enums.CurrencyType;
+import com.banksystem.domain.terminals.SderBankTerminal;
+import com.banksystem.domain.terminals.TazPromBankTerminal;
+import com.banksystem.domain.terminals.VtfBankTerminal;
 import com.banksystem.domain.users.User;
 import com.banksystem.domain.terminals.Terminal;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static com.banksystem.domain.enums.BankName.*;
 
-public  class TerminalTest {
-   public static User user;
-   public static Terminal terminal;
+
+public class TerminalTest {
+    public static User user;
+    public static Terminal terminal;
+
 
     @BeforeClass
-    public static void  init(){
-        user = new User(1 , "Максим", "Кизилов");
-        user.createAccount(CurrencyType.RUBLE, 100100, 7831);
-//        terminal = new Terminal(user);
+    public static void init() throws BankNotFoundException {
+        user = new User(1, "Максим", "Кизилов");
+        user.createAccount(CurrencyType.RUBLE, 100100, 7831, TAZPROM);
+        terminal = new VtfBankTerminal(user);
     }
 
+    @Test
+    public void testCase() {
+        String original = "абв";
+        System.out.println(original.toUpperCase());
 
-    @Test ()
+    }
+
+    @Test()
     public void authorize() throws MyAuthorizeException {
         boolean isAuthorized = terminal.authorize(100100, 7831);
         Assert.assertTrue(isAuthorized);
@@ -53,9 +67,9 @@ public  class TerminalTest {
         int sum = 0;
 
         boolean isAuthorized = terminal.authorize(100100, 7831);
-        for (int i = 25; i < 1000; i+=25){
+        for (int i = 25; i < 1000; i += 25) {
             sum += i;
-            Assert.assertEquals(sum , terminal.deposit(i));
+            Assert.assertEquals(sum, terminal.deposit(i));
         }
         System.out.println(terminal.getBalance());
     }
@@ -65,7 +79,7 @@ public  class TerminalTest {
         boolean isAuthorized = terminal.authorize(100100, 7831);
         terminal.deposit(1000);
         System.out.println();
-        terminal.withdraw(10);
+        terminal.withdraw(100);
     }
 
     @Test(expected = NotEnoughMoneyException.class)

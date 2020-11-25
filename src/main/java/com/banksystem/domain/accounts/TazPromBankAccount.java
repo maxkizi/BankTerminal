@@ -1,6 +1,12 @@
 package com.banksystem.domain.accounts;
 
+import com.banksystem.domain.enums.CurrencyType;
+
 public class TazPromBankAccount extends Account{
-    public static final int PERCENT_FOR_SDERBANK = 12;
-    public static final int PERCENT_FOR_VTF = 6;
+    public TazPromBankAccount(CurrencyType currencyType, int number, int password) {
+        super(currencyType, number, password);
+    }
+
+    public TazPromBankAccount() {
+    }
 }
