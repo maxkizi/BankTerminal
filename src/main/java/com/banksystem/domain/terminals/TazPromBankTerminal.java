@@ -4,7 +4,6 @@ import com.banksystem.Exception.MyAuthorizeException;
 import com.banksystem.Exception.NeedAuthorizationException;
 import com.banksystem.Exception.NotEnoughMoneyException;
 import com.banksystem.domain.accounts.SderBankAccount;
-import com.banksystem.domain.accounts.TazPromBankAccount;
 import com.banksystem.domain.accounts.VtfBankAccount;
 import com.banksystem.domain.users.User;
 

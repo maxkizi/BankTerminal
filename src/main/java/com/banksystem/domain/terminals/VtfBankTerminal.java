@@ -5,7 +5,6 @@ import com.banksystem.Exception.NeedAuthorizationException;
 import com.banksystem.Exception.NotEnoughMoneyException;
 import com.banksystem.domain.accounts.SderBankAccount;
 import com.banksystem.domain.accounts.TazPromBankAccount;
-import com.banksystem.domain.accounts.VtfBankAccount;
 import com.banksystem.domain.users.User;
 
 public class VtfBankTerminal extends Terminal {
@@ -50,7 +49,7 @@ public class VtfBankTerminal extends Terminal {
                 currentAccount.withdraw(amount += bankCommission);
             } else if (currentAccount instanceof TazPromBankAccount) {
                 calcCommission(amount, PERCENT_FOR_TAZPROM);
-                currentAccount.deposit(amount += bankCommission);
+                currentAccount.withdraw(amount += bankCommission);
             } else
                 currentAccount.withdraw(amount);
             printResultOfOperation(rememberAmount, "Выдано");

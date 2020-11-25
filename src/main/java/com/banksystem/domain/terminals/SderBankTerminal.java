@@ -3,14 +3,8 @@ package com.banksystem.domain.terminals;
 import com.banksystem.Exception.MyAuthorizeException;
 import com.banksystem.Exception.NeedAuthorizationException;
 import com.banksystem.Exception.NotEnoughMoneyException;
-import com.banksystem.domain.accounts.Account;
 import com.banksystem.domain.accounts.SderBankAccount;
-
-import com.banksystem.domain.enums.BankName;
 import com.banksystem.domain.users.User;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class SderBankTerminal extends Terminal {
