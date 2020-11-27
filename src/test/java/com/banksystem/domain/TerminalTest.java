@@ -25,8 +25,15 @@ public class TerminalTest {
     @BeforeClass
     public static void init() throws BankNotFoundException {
         user = new User(1, "Максим", "Кизилов");
-        user.createAccount(CurrencyType.RUBLE, 100100, 7831, TAZPROM);
+        user.createAccount(CurrencyType.EURO, 100100, 7831, TAZPROM);
         terminal = new VtfBankTerminal(user);
+    }
+
+    @Test
+    public void converter() throws MyAuthorizeException, NeedAuthorizationException {
+        boolean isAuthorized = terminal.authorize(100100, 7831);
+        terminal.deposit(1000);
+        terminal.convertTo(CurrencyType.RUBLE);
     }
 
     @Test
@@ -44,7 +51,7 @@ public class TerminalTest {
 
     @Test(expected = MyAuthorizeException.class)
     public void authorizeWithMYAuthorizeException() throws MyAuthorizeException {
-        boolean isAuthorized = terminal.authorize(100100, 7831);
+        boolean isAuthorized = terminal.authorize(100100, 731);
         Assert.assertTrue(isAuthorized);
     }
 

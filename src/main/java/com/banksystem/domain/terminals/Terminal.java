@@ -4,6 +4,7 @@ import com.banksystem.Exception.MyAuthorizeException;
 import com.banksystem.Exception.NeedAuthorizationException;
 import com.banksystem.Exception.NotEnoughMoneyException;
 import com.banksystem.domain.accounts.Account;
+import com.banksystem.domain.enums.CurrencyType;
 import com.banksystem.domain.users.User;
 
 import java.util.Map;
@@ -64,11 +65,15 @@ public abstract class Terminal {
         } else throw new NeedAuthorizationException();
     }
 
+    public void convertTo(CurrencyType currencyType){
+        currentAccount.convertTo(currencyType);
+    }
+
     void printResultOfOperation(int amount, String operation) throws NeedAuthorizationException {
         System.out.println("Операция прошла успешно");
         System.out.println(operation + " " + amount + " " + currentAccount.getCurrencyType());
         System.out.println("Комиссия: " + bankCommission);
-        System.out.println("Ваш баланс: " + getBalance());
+        getBalance();
     }
 
     int calcCommission(int amount, int percent) {
@@ -76,8 +81,8 @@ public abstract class Terminal {
         return bankCommission = amount * percent / 100;
     }
 
-    public abstract int deposit(int amount) throws MyAuthorizeException, NeedAuthorizationException;
+    public abstract int deposit(int amount) throws  NeedAuthorizationException;
 
-    public abstract int withdraw(int amount) throws NotEnoughMoneyException, MyAuthorizeException, NeedAuthorizationException;
+    public abstract int withdraw(int amount) throws NotEnoughMoneyException, NeedAuthorizationException;
 
 }

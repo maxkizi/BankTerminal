@@ -19,7 +19,7 @@ public class SderBankTerminal extends Terminal {
 
 
     @Override
-    public int deposit(int amount) throws MyAuthorizeException, NeedAuthorizationException {
+    public int deposit(int amount) throws NeedAuthorizationException {
         if (successfulAuthorization) {
             if (currentAccount instanceof SderBankAccount) {
                 currentAccount.deposit(amount);
@@ -29,17 +29,17 @@ public class SderBankTerminal extends Terminal {
             }
             printResultOfOperation(amount += bankCommission, "Внесено");
             return currentAccount.getBalance();
-        } else throw new MyAuthorizeException();
+        } else throw new NeedAuthorizationException();
 
     }
 
     @Override
-    public int withdraw(int amount) throws NotEnoughMoneyException, MyAuthorizeException, NeedAuthorizationException {
+    public int withdraw(int amount) throws NotEnoughMoneyException, NeedAuthorizationException {
         int rememberAmount = amount;
         if (currentAccount.getBalance() < amount) {
             throw new NotEnoughMoneyException();
         } else if (!successfulAuthorization) {
-            throw new MyAuthorizeException();
+            throw new NeedAuthorizationException();
         } else {
             if (currentAccount instanceof SderBankAccount) {
                 currentAccount.withdraw(amount);
